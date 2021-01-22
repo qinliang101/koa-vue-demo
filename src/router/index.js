@@ -3,7 +3,7 @@ import Index from '../page/index'
 import User from '../page/user'
 
 const router = new VueRouter({
-    mode: 'history',
+    // mode: 'history',
     base: __dirname,
     routes: [
         {

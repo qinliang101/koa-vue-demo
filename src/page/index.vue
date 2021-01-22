@@ -29,8 +29,6 @@
 </template>
 
 <script>
-
-const bcrypt = require('bcryptjs')
 export default {
     data() {
         return {
@@ -48,12 +46,12 @@ export default {
             if (result === true) {
                 let data = {}
                 if (this.isRegister) {
-                    data = await this.$http.post('/api/register', {
+                    data = await this.$http.post('/register', {
                         account: this.formData.account,
                         password: this.formData.password,
                     })
                 } else {
-                    data = await this.$http.post('/api/login', {
+                    data = await this.$http.post('/login', {
                         account: this.formData.account,
                         password: this.formData.password,
                     })

@@ -13,7 +13,7 @@ export default {
         }
     },
     async created() {
-        let data = await this.$http.get('/api/user/' + this.user_id)
+        let data = await this.$http.get('/user/' + this.user_id)
         this.userInfo = data.data
     }
 }
