@@ -58,7 +58,7 @@ export default {
                 }
                 data = data.data
                 if (data.success) {
-                    await localStorage.setItem('token', data.token)
+                    localStorage.setItem('token', data.token)
                     this.$message.success(this.isRegister ? '注册成功' : '登录成功')
                     this.$router.push({ path: '/user', query: { user_id: data.user_id} })
                 } else {

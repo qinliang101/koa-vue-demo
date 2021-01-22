@@ -1,19 +1,8 @@
 const koaRouter = require('koa-router')
 const router = koaRouter()
 const userModel = require('../model/userModel.js')
-const jwt = require('jsonwebtoken')
+const ctrl = require('../utils/ctrl')
 const bcrypt = require('bcryptjs') // 对密码加密和验证
-
-function getToken(user_id, account) {
-    const secret = '4O4KVGsRuhdCCJOT4BfRCqcMnAa4zA4kUmWB3BSy'
-    const token = jwt.sign({
-        user_id: user_id,
-        user_name: account
-     }, secret, {
-        expiresIn:  60 //秒到期时间
-     })
-     return token
-}
 
 // 获取用户详情
 router.get('/user/:id', async ctx => {
@@ -38,7 +27,10 @@ router.post('/login', async ctx => {
                 info: '密码错误！'
             }
         } else {
-            let token = getToken(userInfo.user_id, userInfo.account)
+            let token = ctrl.getToken({
+                user_id: userInfo.user_id,
+                account: userInfo.account
+            })
             ctx.body = {
                 user_id: userInfo.user_id,
                 account: userInfo.account,
@@ -67,7 +59,10 @@ router.post('/register', async ctx => {
             account: body.account,
             password: bcrypt.hashSync(body.password),
         })
-        let token = getToken(userInfo.user_id, userInfo.account)
+        let token = ctrl.getToken({
+            user_id: userInfo.user_id,
+            account: userInfo.account
+        })
         ctx.body = {
             success: true,
             account: userInfo.account,
