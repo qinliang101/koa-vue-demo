@@ -9,7 +9,7 @@ userModel.getUserById = async user_id => { // 注意是async function 而不是f
             user_id: user_id
         }
     })
-    return userInfo.dataValues // 返回数据
+    return userInfo // 返回数据
 }
 
 userModel.getUserByName = async function (account) {

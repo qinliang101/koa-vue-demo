@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 router.get('/user/:id', async ctx => {
+    console.log('___', ctx.cookies.get('user_id'))
     const id = ctx.params.id // 获取url里传过来的参数里的id
-    const result = await userModel.getUserById(id) // 通过await “同步”地返回查询结果
+    const result = await userModel.getUserById(id)
     ctx.body = result // 将请求的结果放到response的body里返回
 })
 
@@ -20,7 +21,7 @@ router.post('/login', async ctx => {
     if (userInfo != null) { // 如果查无此用户会返回null
         if (!bcrypt.compareSync(body.password, userInfo.password)) {
             ctx.body = {
-                success: false, // success标志位是方便前端判断返回是正确与否
+                success: false,
                 info: '密码错误！'
             }
         } else {
@@ -30,10 +31,12 @@ router.post('/login', async ctx => {
             }
             const secret = 'vue-koa-demo' // 指定密钥
             const token = jwt.sign(userToken, secret) // 签发token
+            ctx.cookies.set('user_id', userInfo.user_id, { httpOnly: false}) // false时document.cookie可以访问到（不安全）
+            ctx.cookies.set('token', token)
             ctx.body = {
-                ...userInfo,
+                ...userInfo.dataValues,
                 success: true,
-                token: token // 返回token
+                token: token
             }
         }
     } else {
@@ -58,6 +61,8 @@ router.post('/register', async ctx => {
         }
         const secret = 'vue-koa-demo' // 指定密钥
         const token = jwt.sign(userToken, secret) // 签发token
+        ctx.cookies.set('user_id', userInfo.user_id)
+        ctx.cookies.set('token', token)
         ctx.body = {
             success: true,
             account: userInfo.account,
