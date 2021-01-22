@@ -4,17 +4,32 @@ const userModel = require('../model/userModel.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
+function setCookie(ctx, user_id, token) {
+    ctx.cookies.set('user_id', user_id, { httpOnly: false}) // false时document.cookie可以访问到（不安全）
+    ctx.cookies.set('token', token)
+}
+
+function getCookie(ctx) {
+    return {
+        user_id: ctx.cookies.get('user_id'),
+        token: ctx.cookies.get('token')
+    }
+}
+
+// 获取用户详情
 router.get('/user/:id', async ctx => {
-    console.log('___', ctx.cookies.get('user_id'))
+    // let user_id = getCookie().user_id
     const id = ctx.params.id // 获取url里传过来的参数里的id
     const result = await userModel.getUserById(id)
     ctx.body = result // 将请求的结果放到response的body里返回
 })
 
+// 获取用户列表
 router.get('/userlist', async ctx => {
     ctx.body = await userModel.getUserList()
 })
 
+// 登陆
 router.post('/login', async ctx => {
     const body = ctx.request.body // post过来的数据存在request.body里
     const userInfo = await userModel.getUserByName(body.account)
@@ -31,8 +46,7 @@ router.post('/login', async ctx => {
             }
             const secret = 'vue-koa-demo' // 指定密钥
             const token = jwt.sign(userToken, secret) // 签发token
-            ctx.cookies.set('user_id', userInfo.user_id, { httpOnly: false}) // false时document.cookie可以访问到（不安全）
-            ctx.cookies.set('token', token)
+            setCookie(ctx, userInfo.user_id, token)
             ctx.body = {
                 ...userInfo.dataValues,
                 success: true,
@@ -47,6 +61,7 @@ router.post('/login', async ctx => {
     }
 })
 
+// 注册
 router.post('/register', async ctx => {
     const body = ctx.request.body
     const userInfo = await userModel.getUserByName(body.account)
@@ -61,8 +76,7 @@ router.post('/register', async ctx => {
         }
         const secret = 'vue-koa-demo' // 指定密钥
         const token = jwt.sign(userToken, secret) // 签发token
-        ctx.cookies.set('user_id', userInfo.user_id)
-        ctx.cookies.set('token', token)
+        setCookie(ctx, userInfo.user_id, token)
         ctx.body = {
             success: true,
             account: userInfo.account,
