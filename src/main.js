@@ -6,7 +6,6 @@ import axios from 'axios'
 import tdesign from '@tencent/tdesign-vue'
 import '@tencent/tdesign-vue/dist/tdesign.css'
 
-axios.defaults.baseURL = 'http://localhost'
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.use(tdesign)

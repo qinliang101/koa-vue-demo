@@ -1,28 +1,39 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
-    id: {
+    user_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    nickname: {
-      type: DataTypes.STRING(100),
-      allowNull: true
-    },
-    username: {
-      type: DataTypes.STRING(100),
-      allowNull: true
+    account: {
+      type: DataTypes.STRING(255),
+      allowNull: false
     },
     password: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    nickname: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    gender: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    city: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    address: {
+      type: DataTypes.STRING(500),
       allowNull: true
     },
     create_time: {
       type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: true
     }
   }, {
     sequelize,
@@ -34,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "user_id" },
         ]
       },
     ]
