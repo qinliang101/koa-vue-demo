@@ -56,11 +56,13 @@ export default {
                         password: this.formData.password,
                     })
                 }
-                if (data.data.success) {
+                data = data.data
+                if (data.success) {
+                    await localStorage.setItem('token', data.token)
                     this.$message.success(this.isRegister ? '注册成功' : '登录成功')
-                    this.$router.push({ path: '/user', query: { user_id: data.data.user_id} })
+                    this.$router.push({ path: '/user', query: { user_id: data.user_id} })
                 } else {
-                    this.$message.warning(data.data.info)
+                    this.$message.warning(data.info)
                 }
             } else {
                 this.$message.warning(firstError)

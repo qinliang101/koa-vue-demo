@@ -2,23 +2,21 @@ const koaRouter = require('koa-router')
 const router = koaRouter()
 const userModel = require('../model/userModel.js')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs') // 对密码加密和验证
 
-function setCookie(ctx, user_id, token) {
-    ctx.cookies.set('user_id', user_id, { httpOnly: false}) // false时document.cookie可以访问到（不安全）
-    ctx.cookies.set('token', token)
-}
-
-function getCookie(ctx) {
-    return {
-        user_id: ctx.cookies.get('user_id'),
-        token: ctx.cookies.get('token')
-    }
+function getToken(user_id, account) {
+    const secret = '4O4KVGsRuhdCCJOT4BfRCqcMnAa4zA4kUmWB3BSy'
+    const token = jwt.sign({
+        user_id: user_id,
+        user_name: account
+     }, secret, {
+        expiresIn:  60 //秒到期时间
+     })
+     return token
 }
 
 // 获取用户详情
 router.get('/user/:id', async ctx => {
-    // let user_id = getCookie().user_id
     const id = ctx.params.id // 获取url里传过来的参数里的id
     const result = await userModel.getUserById(id)
     ctx.body = result // 将请求的结果放到response的body里返回
@@ -40,15 +38,14 @@ router.post('/login', async ctx => {
                 info: '密码错误！'
             }
         } else {
-            const userToken = {
-                account: userInfo.account,
-                user_id: userInfo.user_id
-            }
-            const secret = 'vue-koa-demo' // 指定密钥
-            const token = jwt.sign(userToken, secret) // 签发token
-            setCookie(ctx, userInfo.user_id, token)
+            let token = getToken(userInfo.user_id, userInfo.account)
             ctx.body = {
-                ...userInfo.dataValues,
+                user_id: userInfo.user_id,
+                account: userInfo.account,
+                nickname: userInfo.nickname,
+                city: userInfo.city,
+                gender: userInfo.gender,
+                account: userInfo.account,
                 success: true,
                 token: token
             }
@@ -70,13 +67,7 @@ router.post('/register', async ctx => {
             account: body.account,
             password: bcrypt.hashSync(body.password),
         })
-        const userToken = {
-            account: body.account,
-            user_id: userInfo.user_id
-        }
-        const secret = 'vue-koa-demo' // 指定密钥
-        const token = jwt.sign(userToken, secret) // 签发token
-        setCookie(ctx, userInfo.user_id, token)
+        let token = getToken(userInfo.user_id, userInfo.account)
         ctx.body = {
             success: true,
             account: userInfo.account,
