@@ -59,12 +59,12 @@ export default {
                         password: this.formData.password,
                     })
                 }
-                data = data.data
-                if (data.success) {
-                    localStorage.setItem('token', data.token)
-                    this.$router.push({ path: '/user', query: { user_id: data.user_id} })
+                let userInfo = data.data
+                if (userInfo.success) {
+                    localStorage.setItem('token', userInfo.token)
+                    this.$router.push('/user')
                 } else {
-                    this.$message.warning(data.info)
+                    this.$message.warning(userInfo.info)
                 }
             } else {
                 this.$message.warning(firstError)
