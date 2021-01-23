@@ -28,7 +28,7 @@ $http.interceptors.response.use(response => {
             const { status } = error.response
             //如果401或405则到登录页
             if (status == 401 || status == 405) {
-                // location.href = '/'
+                location.href = '/login'
             }
         }
         return Promise.reject(error)

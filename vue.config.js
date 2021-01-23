@@ -1,6 +1,13 @@
 module.exports = {
     lintOnSave: true,
-   
+    chainWebpack: (config) => {
+        config
+            .plugin('html')
+            .tap((args) => {
+                args[0].title = 'Lemon By Leon'
+                return args
+            })
+    },
     devServer: {
         proxy: {
             '/': {

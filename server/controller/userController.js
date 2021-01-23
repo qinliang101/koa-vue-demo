@@ -19,6 +19,9 @@ router.get('/userlist', async ctx => {
 // 登陆
 router.post('/login', async ctx => {
     const body = ctx.request.body // post过来的数据存在request.body里
+    if (!body.account || !body.password) {
+        ctx.throw(400)
+    }
     const userInfo = await userModel.getUserByName(body.account)
     if (userInfo != null) { // 如果查无此用户会返回null
         if (!bcrypt.compareSync(body.password, userInfo.password)) {
@@ -53,6 +56,9 @@ router.post('/login', async ctx => {
 // 注册
 router.post('/register', async ctx => {
     const body = ctx.request.body
+    if (!body.account || !body.password) {
+        ctx.throw(400)
+    }
     const userInfo = await userModel.getUserByName(body.account)
     if (userInfo == null) {
         let userInfo = await userModel.addUser({
