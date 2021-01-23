@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="section_top lemon_title">你好，{{userInfo.account}}</div>
+        <div class="section_top lemon_title">Hello，{{userInfo.account}}</div>
     </div>
 </template>
 

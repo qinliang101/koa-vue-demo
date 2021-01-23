@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
-const secret = '4O4KVGsRuhdCCJOT4BfRCqcMnAa4zA4kUmWB3BSy'
+const appConf = require('../config/appConf')
 
 module.exports = {
     getToken: user => {
-        const token = jwt.sign(user, secret, {
+        const token = jwt.sign(user, appConf.secret, {
             expiresIn:  '2h' // 2小时到期
          })
          return token
@@ -13,7 +13,7 @@ module.exports = {
         if (ctx.header && ctx.header.authorization) {
             const token = ctx.header.authorization 
             if (token) {
-                payload = await jwt.verify(token.split(' ')[1], secret)
+                payload = await jwt.verify(token.split(' ')[1], appConf.secret)
                 return payload
             }
             return
