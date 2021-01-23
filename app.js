@@ -35,7 +35,6 @@ app.use(
 )
 
 app.use((ctx, next) => {
-    console.log(ctx.request)
     if (ctx.header && ctx.header.authorization) {
         const parts = ctx.header.authorization.split(' ')
         if (parts.length === 2) {

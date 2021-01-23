@@ -5,10 +5,13 @@ const ctrl = require('../utils/ctrl')
 const bcrypt = require('bcryptjs') // 对密码加密和验证
 
 // 获取用户详情
-router.get('/user/:id', async ctx => {
-    const id = ctx.params.id // 获取url里传过来的参数里的id
-    const result = await userModel.getUserById(id)
-    ctx.body = result // 将请求的结果放到response的body里返回
+router.get('/getUser', async ctx => {
+    const sess = await ctrl.getSession(ctx)
+    let userInfo = await userModel.getUserById(sess.user_id)
+    ctx.body = {
+        account: userInfo.account,
+        user_id: userInfo.user_id,
+    }
 })
 
 // 获取用户列表

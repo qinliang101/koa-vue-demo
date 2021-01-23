@@ -1,6 +1,6 @@
 <template>
-    <div style="margin:0 auto">
-        <div>你好，{{userInfo.account}}</div>
+    <div class="page">
+        <div class="section_top lemon_title">你好，{{userInfo.account}}</div>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
         }
     },
     async created() {
-        let data = await this.$http.get('/user/' + this.user_id)
+        let data = await this.$http.get('/getUser')
         this.userInfo = data.data
     }
 }

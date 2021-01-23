@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="page">
         <t-form
-            style="width: 350px;margin:0 auto"
+            class="section_top t_form_ceneter"
             :data="formData"
             ref="form"
             :colon="true"
