@@ -44,7 +44,7 @@ app.use((ctx, next) => {
                         complete: true
                     })
                 } catch (error) {
-                    ctx.throw(401)
+                    ctx.throw(401, '授权已过期，请重新登陆')
                 }
             }
         }

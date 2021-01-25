@@ -17,7 +17,7 @@ export default {
             let data = await this.$http.get('/getUser')
             this.userInfo = data.data
         } catch(e) {
-            this.$message.warning(e.statusText)
+            this.$message.warning(e.data.error)
         }
     }
 }
