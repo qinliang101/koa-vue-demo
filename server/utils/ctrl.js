@@ -16,7 +16,7 @@ module.exports = {
                 payload = await jwt.verify(token.split(' ')[1], appConf.secret)
                 return payload
             }
-            return
         }
+        ctx.throw(401)
     }
 }

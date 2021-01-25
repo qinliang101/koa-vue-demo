@@ -5,7 +5,6 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
-const koaJwt = require('koa-jwt')
 const jwt = require('jsonwebtoken')
 const appConf = require('./server/config/appConf')
 const user = require('./server/controller/userController')
@@ -25,16 +24,13 @@ app.use(views(__dirname + '/dist', {
     extension: 'html'
 }))
 
-//路由权限控制 除了path里的路径不需要验证token 其他都要
-app.use(
-    koaJwt({
-        secret: appConf.secret
-    }).unless({
-        path: [/^\/login/, /^\/register/]
-    })
-)
+
 
 app.use((ctx, next) => {
+    // 登陆、注册不需要验证token
+    if (['/login', '/register'].includes(ctx.url)) {
+        return next()
+    }
     if (ctx.header && ctx.header.authorization) {
         const parts = ctx.header.authorization.split(' ')
         if (parts.length === 2) {

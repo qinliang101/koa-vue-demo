@@ -20,8 +20,11 @@ $http.interceptors.response.use(response => {
 
         //如果token存在则存在localStorage
         authorization && localStorage.setItem('token', authorization)
-
-        return response
+        return {
+            status: response.status,
+            statusText: response.statusText,
+            data: response.data
+        }
     },
     error => {
         if (error.response) {
@@ -31,7 +34,7 @@ $http.interceptors.response.use(response => {
                 location.href = '#/login'
             }
         }
-        return Promise.reject(error)
+        return Promise.reject(error.response)
     }
 )
 

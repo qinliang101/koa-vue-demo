@@ -13,8 +13,12 @@ export default {
         }
     },
     async created() {
-        let data = await this.$http.get('/getUser')
-        this.userInfo = data.data
+        try {
+            let data = await this.$http.get('/getUser')
+            this.userInfo = data.data
+        } catch(e) {
+            this.$message.warning(e.statusText)
+        }
     }
 }
 </script>
