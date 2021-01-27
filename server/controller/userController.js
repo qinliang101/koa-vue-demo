@@ -9,7 +9,7 @@ router.get('/getUser', async ctx => {
     const sess = await ctrl.getSession(ctx)
     let userInfo = await userModel.getUserById(sess.user_id)
     ctx.body = {
-        account: userInfo.account,
+        user_name: userInfo.user_name,
         user_id: userInfo.user_id,
     }
 })
@@ -22,10 +22,10 @@ router.get('/userlist', async ctx => {
 // 登陆
 router.post('/login', async ctx => {
     const body = ctx.request.body // post过来的数据存在request.body里
-    if (!body.account || !body.password) {
+    if (!body.user_name || !body.password) {
         ctx.throw(400)
     }
-    const userInfo = await userModel.getUserByName(body.account)
+    const userInfo = await userModel.getUserByName(body.user_name)
     if (userInfo != null) { // 如果查无此用户会返回null
         if (!bcrypt.compareSync(body.password, userInfo.password)) {
             ctx.body = {
@@ -35,15 +35,15 @@ router.post('/login', async ctx => {
         } else {
             let token = ctrl.getToken({
                 user_id: userInfo.user_id,
-                account: userInfo.account
+                user_name: userInfo.user_name
             })
             ctx.body = {
                 user_id: userInfo.user_id,
-                account: userInfo.account,
+                user_name: userInfo.user_name,
                 nickname: userInfo.nickname,
                 city: userInfo.city,
                 gender: userInfo.gender,
-                account: userInfo.account,
+                user_name: userInfo.user_name,
                 success: true,
                 token: token
             }
@@ -59,22 +59,22 @@ router.post('/login', async ctx => {
 // 注册
 router.post('/register', async ctx => {
     const body = ctx.request.body
-    if (!body.account || !body.password) {
+    if (!body.user_name || !body.password) {
         ctx.throw(400)
     }
-    const userInfo = await userModel.getUserByName(body.account)
+    const userInfo = await userModel.getUserByName(body.user_name)
     if (userInfo == null) {
         let userInfo = await userModel.addUser({
-            account: body.account,
+            user_name: body.user_name,
             password: bcrypt.hashSync(body.password),
         })
         let token = ctrl.getToken({
             user_id: userInfo.user_id,
-            account: userInfo.account
+            user_name: userInfo.user_name
         })
         ctx.body = {
             success: true,
-            account: userInfo.account,
+            user_name: userInfo.user_name,
             user_id: userInfo.user_id,
             token: token // 返回token
         }

@@ -8,8 +8,8 @@
             @submit="onSubmit"
             labelWidth="0"
         >
-            <t-form-item name='account'>
-                <t-input type="account" clearable v-model="formData.account" placeholder="请输入账户名">
+            <t-form-item name='user_name'>
+                <t-input type="user_name" clearable v-model="formData.user_name" placeholder="请输入账户名">
                     <t-icon name="desktop" slot="prefix-icon"></t-icon>
                 </t-input>
             </t-form-item>
@@ -36,7 +36,7 @@ export default {
     data() {
         return {
             formData: {
-                account: '',
+                user_name: '',
                 password: '',
             },
             isRegister: false
@@ -50,12 +50,12 @@ export default {
                 let data = {}
                 if (this.isRegister) {
                     data = await this.$http.post('/register', {
-                        account: this.formData.account,
+                        user_name: this.formData.user_name,
                         password: this.formData.password,
                     })
                 } else {
                     data = await this.$http.post('/login', {
-                        account: this.formData.account,
+                        user_name: this.formData.user_name,
                         password: this.formData.password,
                     })
                 }
@@ -73,7 +73,7 @@ export default {
 
         switchSubmmit() {
             this.isRegister = !this.isRegister
-            this.formData.account = ''
+            this.formData.user_name = ''
             this.formData.password = ''
         }
     },

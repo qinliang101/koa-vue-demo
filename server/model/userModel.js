@@ -1,6 +1,6 @@
 const db = require('../config/dbConf')
 const { DataTypes } = require('sequelize')
-const User = require('../schema/user')(db, DataTypes)
+const User = require('../schema/account')(db, DataTypes)
 
 const userModel = {}
 userModel.getUserById = async user_id => { // 注意是async function 而不是function。对于需要等待promise结果的函数都需要async await。
@@ -12,10 +12,10 @@ userModel.getUserById = async user_id => { // 注意是async function 而不是f
     return userInfo // 返回数据
 }
 
-userModel.getUserByName = async function (account) {
+userModel.getUserByName = async function (user_name) {
     const userInfo = await User.findOne({
         where: {
-            account: account
+            user_name: user_name
         }
     })
     return userInfo
@@ -32,7 +32,7 @@ userModel.getUserList = async () => {
 
 userModel.addUser = async data => {
     return await User.create({
-        account: data.account,
+        user_name: data.user_name,
         password: data.password
     })
 }
